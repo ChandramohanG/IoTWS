@@ -10,7 +10,6 @@
     "variables": {},
     "resources": [
         {
-            "comments": "Generalized from resource: '/subscriptions/6bff6c5c-be29-427b-a26d-dbecde768418/resourceGroups/RG_IOT/providers/Microsoft.Devices/IotHubs/IoTMonitoring'.",
             "type": "Microsoft.Devices/IotHubs",
             "sku": {
                 "name": "F1",
