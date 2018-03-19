@@ -11,11 +11,11 @@ $inputName ="iotdata"
 
 New-AzureRmResourceGroup -Name $resourceGroupName -Location $resourceGroupLocation
 
-Set-AzureRmResourceGroup -Name $resourceGroupName -Tag @{Department="IoT"}
-
-New-AzureRmIotHub -ResourceGroupName $resourceGroupName -Name "iotmonitor" -SkuName "F1" -Location $resourceGroupLocation  
-
+New-AzureRmIotHub -ResourceGroupName $resourceGroupName -Name $IoTHubName -SkuName "F1" -Location $resourceGroupLocation  
 
 Get-AzureRmIotHub -ResourceGroupName RG_IoTMonitor  
 
-Get-AzureRmStreamAnalyticsInput -ResourceGroupName RG_IoT
+#Get-AzureRmStreamAnalyticsInput -ResourceGroupName RG_IoT
+
+#New-AzureRmResourceGroupDeployment  -ResourceGroupName RG_IoTMonitor -DeploymentDebugLogLevel All `
+#  -TemplateFile F:\GitCode\IoTWateringSystem\azuredeploy.json -TemplateParameterFile F:\GitCode\IoTWateringSystem\azuredeploy.parameter.json 

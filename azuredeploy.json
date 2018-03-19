@@ -6,7 +6,7 @@
       "type": "string",
       "minLength": 3,
       "metadata": {
-        "description": "Name of the IoT Hub instance to provision."
+        "description": "Name of the IoT Hub"
       }
     },
     "skuName": {
@@ -18,7 +18,7 @@
       ],
       "defaultValue": "F1",
       "metadata": {
-        "description": "Recommended SKU: S2"
+        "description": "Recommended is S2"
       }
     },
     "capacityUnits": {
@@ -26,7 +26,24 @@
       "minValue": 1,
       "defaultValue": 1,
       "metadata": {
-        "description": "Number of desired IoT Hub units"
+        "description": "Calculate the estimate number of messages and set this accordingly."
+      }
+    },
+    "d2cMessageRetentionInDaysPeriod": {
+      "type": "int",
+      "minValue": 1,
+      "maxValue": 7,
+      "defaultValue": 1,
+      "metadata": {
+        "description": "Retention time in days for device-to-cloud messages."
+      }
+    },
+    "d2cPartitionCount": {
+      "type": "int",
+      "minValue": 1,
+      "defaultValue": 2,
+      "metadata": {
+        "description": "Number of desired partitions for device-to-cloud event ingestion."
       }
     }
   },
@@ -40,7 +57,12 @@
       "location": "[variables('location')]",
       "name": "[parameters('iotHubName')]",
       "properties": {
-        "location": "[resourceGroup().location]"
+        "eventHubEndpoints": {
+          "events": {
+            "retentionTimeInDays": "[parameters('d2cMessageRetentionInDaysPeriod')]",
+            "partitionCount": "[parameters('d2cPartitionCount')]"
+          }
+        }
       },
       "sku": {
         "name": "[parameters('skuName')]",
