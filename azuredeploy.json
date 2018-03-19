@@ -1,5 +1,5 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "iotHubName": {
@@ -8,35 +8,51 @@
       "metadata": {
         "description": "Name of the IoT Hub instance to provision."
       }
+    },
+    "skuName": {
+      "type": "string",
+      "allowedValues": [
+        "F1",
+        "S1",
+        "S2"
+      ],
+      "defaultValue": "F1",
+      "metadata": {
+        "description": "Recommended SKU: S2"
+      }
+    },
+    "capacityUnits": {
+      "type": "int",
+      "minValue": 1,
+      "defaultValue": 1,
+      "metadata": {
+        "description": "Number of desired IoT Hub units"
+      }
     }
   },
+  "variables": {
+    "apiVersion": "2016-02-03",
+    "location": "[resourceGroup().location]"
+  },
   "resources": [
-      {
-        "apiVersion": "2016-02-03",
-        "type": "Microsoft.Devices/IotHubs",
-        "name": "[parameters('iothubName')]",
-        "location": "West Europe",
-        "skuName": {
-          "type": "string",
-          "allowedValues": [
-            "F1",
-            "S1",
-            "S2"
-          ],
-          "defaultValue": "F1",
-          "metadata": {
-            "description": "Recommended SKU is S2"
-          }
-        },
-        "properties": {
-          "location": "West Euorpe"
-        }
-      }
-    ],
-    "outputs": {
-      "hubKeys": {
-        "value": "[listKeys(resourceId('Microsoft.Devices/IotHubs', parameters('iothubName')), '2016-02-03')]",
-        "type": "object"
-      }
+    {
+      "apiVersion": "2016-02-03",
+      "location": "[variables('location')]",
+      "name": "[parameters('iotHubName')]",
+      "properties": {
+        "location": "[resourceGroup().location]"
+      },
+      "sku": {
+        "name": "[parameters('skuName')]",
+        "capacity": "[parameters('capacityUnits')]"
+      },
+      "type": "Microsoft.Devices/iotHubs"
+    }
+  ],
+  "outputs": {
+    "iotHubKeys": {
+      "value": "[listKeys(resourceId('Microsoft.Devices/iotHubs', parameters('iotHubName')), variables('apiVersion'))]",
+      "type": "object"
     }
   }
+}
