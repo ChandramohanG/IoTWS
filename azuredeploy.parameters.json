@@ -1,12 +1,18 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
   "parameters": {
     "hubName": {
       "value": "IoTMonitoring"
     },
     "skuName": {
-      "value": "F1"
+      "value": "S1"
+    },
+    "capacityUnits": {
+      "value": 1
+    },
+    "Streamingjobname": {
+      "value": ""
     }
   }
-  }
+}
