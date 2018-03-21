@@ -30,7 +30,7 @@
         "description": "Describes plan's pricing tier and capacity. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
       }
     },
-    "skuName": {
+    "ioTHub_skuName": {
       "type": "string",
       "allowedValues": [
         "F1",
@@ -50,25 +50,25 @@
         "description": "Calculate the estimate number of messages and set this accordingly."
       }
     },
-    "streamingjobname": {
+    "Streamingjobname": {
       "type": "string",
       "metadata": {
         "description": "Name of the Streaming Job"
       }
     },
-    "storageeuropedata_name": {
+    "Storageeuropedata_name": {
       "type": "string",
       "metadata": {
         "description": "Name of the storage for Europe"
       }
     },
-    "storageUSdata_name": {
+    "StorageUSdata_name": {
       "type": "string",
       "metadata": {
         "description": "Name of the storage for US"
       }
     },
-    "storagegeneraldata_name": {
+    "Storagegeneraldata_name": {
       "type": "string",
       "metadata": {
         "description": "Name of the storage for any other regions"
@@ -113,7 +113,7 @@
         }
       },
       "sku": {
-        "name": "[parameters('skuName')]",
+        "name": "[parameters('ioTHub_skuName')]",
         "capacity": "[parameters('capacityUnits')]"
       },
       "type": "Microsoft.Devices/iotHubs"
@@ -125,7 +125,7 @@
         "tier": "Standard"
       },
       "kind": "BlobStorage",
-      "name": "[parameters('storageeuropedata_name')]",
+      "name": "[parameters('Storageeuropedata_name')]",
       "apiVersion": "2017-10-01",
       "location": "westeurope",
       "tags": {},
@@ -160,7 +160,7 @@
         "tier": "Standard"
       },
       "kind": "BlobStorage",
-      "name": "[parameters('storageUSdata_name')]",
+      "name": "[parameters('StorageUSdata_name')]",
       "apiVersion": "2017-10-01",
       "location": "East US 2",
       "tags": {},
@@ -195,7 +195,7 @@
         "tier": "Standard"
       },
       "kind": "BlobStorage",
-      "name": "[parameters('storagegeneraldata_name')]",
+      "name": "[parameters('Storagegeneraldata_name')]",
       "apiVersion": "2017-10-01",
       "location": "West Europe",
       "tags": {},
@@ -293,7 +293,7 @@
       "type": "Microsoft.Web/sites"
     },
     {
-      "name": "[parameters('streamingjobname')]",
+      "name": "[parameters('Streamingjobname')]",
       "apiVersion": "2017-04-01-preview",
       "location": "[resourceGroup().location]",
       "type": "Microsoft.StreamAnalytics/StreamingJobs",
