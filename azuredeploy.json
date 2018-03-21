@@ -73,6 +73,12 @@
       "metadata": {
         "description": "Name of the storage for any other regions"
       }
+    },
+    "UserandReferenceData_name": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the storage to store user and reference data"
+      }
     }
   },
   "resources": [
@@ -218,6 +224,41 @@
       "dependsOn": []
     },
     {
+      "type": "Microsoft.Storage/storageAccounts",
+      "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+      },
+      "kind": "BlobStorage",
+      "name": "[parameters('UserandReferenceData_name')]",
+      "apiVersion": "2017-10-01",
+      "location": "West Europe",
+      "tags": {},
+      "scale": null,
+      "properties": {
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "virtualNetworkRules": [],
+          "ipRules": [],
+          "defaultAction": "Allow"
+        },
+        "supportsHttpsTrafficOnly": false,
+        "encryption": {
+          "services": {
+            "file": {
+              "enabled": true
+            },
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        },
+        "accessTier": "Cool"
+      },
+      "dependsOn": []
+    },
+    {
       "name": "[parameters('IoTManagementAppPlanName')]",
       "type": "Microsoft.Web/serverfarms",
       "location": "[resourceGroup().location]",
@@ -284,8 +325,7 @@
                 "properties": {
                   "encoding": "UTF8"
                 }
-              },
-              "etag": "daaf57ed-043e-45f0-92f5-c1915c3acd6c"
+              }
             },
             "type": "Microsoft.StreamAnalytics/streamingjobs/inputs"
           }
@@ -293,10 +333,96 @@
         "transformation": {
           "name": "Transformation",
           "properties": {
-            "query": "SELECT\r\n    *\r\nINTO\r\n    [chartdata]\r\nFROM\r\n    [iotdata]",
+            "query": "SELECT\r\n    *\r\nINTO\r\n    [chartdata]\r\nFROM\r\n    [iotdata] \r\n SELECT\r\n    *\r\nINTO\r\n    [dbEuropeData]\r\nFROM\r\n    [iotdata] WHERE location = 'EU'",
             "streamingUnits": 1
           }
-        }
+        },
+        "outputs": [
+          {
+            "properties": {
+              "datasource": {
+                "type": "Microsoft.Storage/Blob",
+                "properties": {
+                  "storageAccounts": [
+                    {
+                      "accountKey": "storageaccountkey",
+                      "accountName": "europedatastorage1"
+                    }
+                  ],
+                  "container": "container4data",
+                  "pathPattern": "",
+                  "dateFormat": "yyyy/MM/dd",
+                  "timeFormat": "HH"
+                }
+              },
+              "serialization": {
+                "type": "Json",
+                "properties": {
+                  "encoding": "UTF8",
+                  "format": "LineSeparated"
+                }
+              }
+            },
+            "name": "dbEuropeData",
+            "type": "Microsoft.StreamAnalytics/streamingjobs/outputs"
+          },
+          {
+            "properties": {
+              "datasource": {
+                "type": "Microsoft.Storage/Blob",
+                "properties": {
+                  "storageAccounts": [
+                    {
+                      "accountKey": "storageaccountkey",
+                      "accountName": "usdatastorage1"
+                    }
+                  ],
+                  "container": "container4data",
+                  "pathPattern": "",
+                  "dateFormat": "yyyy/MM/dd",
+                  "timeFormat": "HH"
+                }
+              },
+              "serialization": {
+                "type": "Json",
+                "properties": {
+                  "encoding": "UTF8",
+                  "format": "LineSeparated"
+                }
+              }
+            },
+            "name": "dbUSData",
+            "type": "Microsoft.StreamAnalytics/streamingjobs/outputs"
+          },
+          {
+            "properties": {
+              "datasource": {
+                "type": "Microsoft.Storage/Blob",
+                "properties": {
+                  "storageAccounts": [
+                    {
+                      "accountKey": "storageaccountkey",
+                      "accountName": "generaldatastorage1"
+                    }
+                  ],
+                  "container": "container4data",
+                  "pathPattern": "",
+                  "dateFormat": "yyyy/MM/dd",
+                  "timeFormat": "HH"
+                }
+              },
+              "serialization": {
+                "type": "Json",
+                "properties": {
+                  "encoding": "UTF8",
+                  "format": "LineSeparated"
+                }
+              }
+            },
+            "name": "dbGeneralData",
+            "type": "Microsoft.StreamAnalytics/streamingjobs/outputs"
+          }
+        ]
       }
     }
   ],

@@ -23,9 +23,10 @@ Get-AzureRmIotHub -ResourceGroupName RG_IoTMonitor
 
 New-AzureRmStreamAnalyticsInput -JobName Streaming
 
-New-AzureRmResourceGroupDeployment  -ResourceGroupName $resourceGroupName -DeploymentDebugLogLevel All `
+New-AzureRmResourceGroupDeployment -Name deploy1  -ResourceGroupName $resourceGroupName -DeploymentDebugLogLevel All `
   -TemplateFile F:\GitCode\IoTWateringSystem\azuredeploy.json -TemplateParameterFile F:\GitCode\IoTWateringSystem\azuredeploy.parameter.json 
 
+  Get-AzureRmResourceGroupDeploymentOperation -DeploymentName deploy1
 
 $ctx = New-AzureStorageContext -StorageAccountName "euorpedatastore1212" -StorageAccountKey (Get-AzureRmStorageAccountKey -ResourceGroupName $resourceGroupName -Name "euorpedatastore1212" | Select-Object -First 1 -ExpandProperty Value)
 New-AzureStorageContainer -Context $ctx -Name "container4data"
@@ -33,6 +34,9 @@ New-AzureStorageContainer -Context $ctx -Name "container4data"
 #Get-AzureRmStorageAccountKey -ResourceGroupName $resourceGroupName -Name "euorpedatastore1212" | Select-Object -First 1 -ExpandProperty Value
 
 $ctx
+
+Get-AzureRmResourceGroupDeploymentOperation
+
 
 #S2 Standard is recommended
 $webappname="iOTManagementApp"
