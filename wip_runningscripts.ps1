@@ -8,6 +8,9 @@ $resourceGroupName = "RG_IoTMonitor"
 $resourceGroupLocation = "West Europe"
 $IoTHubName = "IoTMonitoring"
 $inputName ="iotdata"
+$Appserviceplan = "IoTManagementAppPlan"
+$Appservicewebsite = "IoTManagementApp"
+$StreamingAnalyticsJOBname = "StreamingAnalyticsJOB"
 
 New-AzureRmResourceGroup -Name $resourceGroupName -Location $resourceGroupLocation
 
@@ -16,18 +19,26 @@ New-AzureRmIotHub -ResourceGroupName $resourceGroupName -Name $IoTHubName -SkuNa
 Get-AzureRmIotHub -ResourceGroupName RG_IoTMonitor  
 
 #Get-AzureRmStreamAnalyticsInput -ResourceGroupName RG_IoT
+#Get-AzureRmStreamAnalyticsoutput -ResourceGroupName RG_IoTMonitor
 
-New-AzureRmResourceGroupDeployment  -ResourceGroupName RG_IoTMonitor -DeploymentDebugLogLevel All `
+New-AzureRmStreamAnalyticsInput -JobName Streaming
+
+New-AzureRmResourceGroupDeployment  -ResourceGroupName $resourceGroupName -DeploymentDebugLogLevel All `
   -TemplateFile F:\GitCode\IoTWateringSystem\azuredeploy.json -TemplateParameterFile F:\GitCode\IoTWateringSystem\azuredeploy.parameter.json 
 
+
+$ctx = New-AzureStorageContext -StorageAccountName "euorpedatastore1212" -StorageAccountKey (Get-AzureRmStorageAccountKey -ResourceGroupName $resourceGroupName -Name "euorpedatastore1212" | Select-Object -First 1 -ExpandProperty Value)
+New-AzureStorageContainer -Context $ctx -Name "container4data"
+
+#Get-AzureRmStorageAccountKey -ResourceGroupName $resourceGroupName -Name "euorpedatastore1212" | Select-Object -First 1 -ExpandProperty Value
+
+$ctx
 
 #S2 Standard is recommended
 $webappname="iOTManagementApp"
 New-AzureRmAppServicePlan -Name $webappname -Location $resourceGroupLocation -ResourceGroupName $resourceGroupName -Tier Free
 
 New-AzureRmWebApp -Name $webappname -Location 'West Europe' -AppServicePlan $webappname -ResourceGroupName $resourceGroupName
-
-New-AzureRmStreamAnalyticsJob -Name "StreamAnalyticsJob" -File F:\GitCode\IoTWateringSystem\streamjob.json -ResourceGroupName $resourceGroupName
 
 
                     {

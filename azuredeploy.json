@@ -13,6 +13,10 @@
       "type": "string",
       "minLength": 1
     },
+    "IoTManagementAppName": {
+      "type": "string",
+      "minLength": 1
+    },
     "IoTManagementAppPlanSkuName": {
       "type": "string",
       "defaultValue": "F1",
@@ -51,17 +55,30 @@
       "metadata": {
         "description": "Name of the Streaming Job"
       }
+    },
+    "storageeuropedata_name": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the storage for Europe"
+      }
+    },
+    "storageUSdata_name": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the storage for US"
+      }
+    },
+    "storagegeneraldata_name": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the storage for any other regions"
+      }
     }
   },
-  "variables": {
-    "apiVersion": "2016-02-03",
-    "location": "[resourceGroup().location]",
-    "IoTManagementAppName": "IoTManagementApp"  
-   },
   "resources": [
     {
       "apiVersion": "2016-02-03",
-      "location": "[variables('location')]",
+      "location": "[resourceGroup().location]",
       "name": "[parameters('iotHubName')]",
       "properties": {
         "eventHubEndpoints": {
@@ -96,6 +113,111 @@
       "type": "Microsoft.Devices/iotHubs"
     },
     {
+      "type": "Microsoft.Storage/storageAccounts",
+      "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+      },
+      "kind": "BlobStorage",
+      "name": "[parameters('storageeuropedata_name')]",
+      "apiVersion": "2017-10-01",
+      "location": "westeurope",
+      "tags": {},
+      "scale": null,
+      "properties": {
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "virtualNetworkRules": [],
+          "ipRules": [],
+          "defaultAction": "Allow"
+        },
+        "supportsHttpsTrafficOnly": false,
+        "encryption": {
+          "services": {
+            "file": {
+              "enabled": true
+            },
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        },
+        "accessTier": "Cool"
+      },
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+      },
+      "kind": "BlobStorage",
+      "name": "[parameters('storageUSdata_name')]",
+      "apiVersion": "2017-10-01",
+      "location": "East US 2",
+      "tags": {},
+      "scale": null,
+      "properties": {
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "virtualNetworkRules": [],
+          "ipRules": [],
+          "defaultAction": "Allow"
+        },
+        "supportsHttpsTrafficOnly": false,
+        "encryption": {
+          "services": {
+            "file": {
+              "enabled": true
+            },
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        },
+        "accessTier": "Cool"
+      },
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+      },
+      "kind": "BlobStorage",
+      "name": "[parameters('storagegeneraldata_name')]",
+      "apiVersion": "2017-10-01",
+      "location": "West Europe",
+      "tags": {},
+      "scale": null,
+      "properties": {
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "virtualNetworkRules": [],
+          "ipRules": [],
+          "defaultAction": "Allow"
+        },
+        "supportsHttpsTrafficOnly": false,
+        "encryption": {
+          "services": {
+            "file": {
+              "enabled": true
+            },
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        },
+        "accessTier": "Cool"
+      },
+      "dependsOn": []
+    },
+    {
       "name": "[parameters('IoTManagementAppPlanName')]",
       "type": "Microsoft.Web/serverfarms",
       "location": "[resourceGroup().location]",
@@ -113,21 +235,21 @@
       }
     },
     {
-      "name": "[variables('IoTManagementAppName')]",
-      "type": "Microsoft.Web/sites",
-      "location": "[resourceGroup().location]",
       "apiVersion": "2015-08-01",
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', parameters('IoTManagementAppPlanName'))]"
       ],
+      "location": "[resourceGroup().location]",
+      "name": "[parameters('IoTManagementAppName')]",
+      "properties": {
+        "name": "[parameters('IoTManagementAppName')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('IoTManagementAppPlanName'))]"
+      },
       "tags": {
         "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', parameters('IoTManagementAppPlanName')))]": "Resource",
         "displayName": "IoTManagementApp"
       },
-      "properties": {
-        "name": "[variables('IoTManagementAppName')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('IoTManagementAppPlanName'))]"
-      }
+      "type": "Microsoft.Web/sites"
     },
     {
       "name": "[parameters('streamingjobname')]",
@@ -143,7 +265,31 @@
         "eventsOutOfOrderMaxDelayInSeconds": 0,
         "eventsLateArrivalMaxDelayInSeconds": 5,
         "dataLocale": "en-US",
-        "inputs": [],
+        "inputs": [
+          {
+            "Name": "iotdata",
+            "properties": {
+              "type": "Stream",
+              "datasource": {
+                "type": "Microsoft.Devices/IotHubs",
+                "properties": {
+                  "iotHubNamespace": "IoTMonitoring",
+                  "sharedAccessPolicyName": "iothubowner",
+                  "sharedAccessPolicyKey": "[listkeys(resourceId('Microsoft.Devices/IotHubs/IotHubKeys',parameters('iothubname'), 'iothubowner'),'2016-02-03').primaryKey]",
+                  "endpoint": "messages/events"
+                }
+              },
+              "serialization": {
+                "type": "Json",
+                "properties": {
+                  "encoding": "UTF8"
+                }
+              },
+              "etag": "daaf57ed-043e-45f0-92f5-c1915c3acd6c"
+            },
+            "type": "Microsoft.StreamAnalytics/streamingjobs/inputs"
+          }
+        ],
         "transformation": {
           "name": "Transformation",
           "properties": {
@@ -153,10 +299,10 @@
         }
       }
     }
-      ],
+  ],
       "outputs": {
         "iotHubKeys": {
-          "value": "[listKeys(resourceId('Microsoft.Devices/iotHubs', parameters('iotHubName')), variables('apiVersion'))]",
+          "value": "[listKeys(resourceId('Microsoft.Devices/iotHubs', parameters('iotHubName')), '2016-02-03')]",
           "type": "object"
         }
       }
