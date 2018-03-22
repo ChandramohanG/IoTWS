@@ -11,13 +11,13 @@ Work In Progress..
 </a>
 
 
-##Summary:##
+## Summary: ##
 -------
 Please go through IoTWateringSystem.docx and TechDesign.pptx. Estimates.xlsx has the cost estimates for this proposed infrastructure.
 
 Use Deploy to Azure to deploy the infrastructure. 
 
-######Parameters:######
+## Parameters: ##
 
 * iotHubName 			- Name of the IoT Hub
  

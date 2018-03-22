@@ -35,7 +35,8 @@
       "allowedValues": [
         "F1",
         "S1",
-        "S2"
+        "S2",
+        "S3"
       ],
       "defaultValue": "S1",
       "metadata": {
@@ -316,7 +317,7 @@
                 "properties": {
                   "iotHubNamespace": "IoTMonitoring",
                   "sharedAccessPolicyName": "iothubowner",
-                  "sharedAccessPolicyKey": "[listkeys(resourceId('Microsoft.Devices/IotHubs/IotHubKeys',parameters('iothubname'), 'iothubowner'),'2016-02-03').primaryKey]",
+                  "sharedAccessPolicyKey": "[listkeys(resourceId('Microsoft.Devices/IotHubs/IotHubKeys',parameters('iotHubName'), 'iothubowner'),'2016-02-03').primaryKey]",
                   "endpoint": "messages/events"
                 }
               },
@@ -333,7 +334,7 @@
         "transformation": {
           "name": "Transformation",
           "properties": {
-            "query": "SELECT\r\n    *\r\nINTO\r\n  [dbUSdata]\r\nFROM\r\n    [iotdata]  WHERE location = 'GN' \r\n SELECT\r\n    *\r\nINTO\r\n    [dbEuropeData]\r\nFROM\r\n    [iotdata] WHERE location = 'EU' \r\n SELECT\r\n    *\r\nINTO\r\n    [dbGeneralData]\r\nFROM\r\n    [iotdata] WHERE location = 'GN'",
+            "query": "SELECT\r\n    *\r\nINTO\r\n  [dbUSdata]\r\nFROM\r\n    [iotdata]  WHERE location = 'US' \r\n SELECT\r\n    *\r\nINTO\r\n    [dbEuropeData]\r\nFROM\r\n    [iotdata] WHERE location = 'EU' \r\n SELECT\r\n    *\r\nINTO\r\n    [dbGeneralData]\r\nFROM\r\n    [iotdata] WHERE location = 'GN'",
             "streamingUnits": 1
           }
         },
@@ -432,4 +433,4 @@
           "type": "object"
         }
       }
-    }
+}
