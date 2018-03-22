@@ -4,7 +4,7 @@ Login-AzureRmAccount
 
 Set-AzureRmContext -Subscription 'Windows Azure MSDN - Visual Studio Ultimate'
 
-$resourceGroupName = "RG_IoTMonitor"
+$resourceGroupName = "RG_IoTM"
 $resourceGroupLocation = "West Europe"
 $IoTHubName = "IoTMonitoring"
 $inputName ="iotdata"
@@ -40,7 +40,7 @@ Get-AzureRmResourceGroupDeploymentOperation
 
 #S2 Standard is recommended
 $webappname="iOTManagementApp"
-New-AzureRmAppServicePlan -Name $webappname -Location $resourceGroupLocation -ResourceGroupName $resourceGroupName -Tier Free
+New-AzureRmAppServicePlan -Name $webappname -Location $resourceGroupLocation -ResourceGroupName $resourceGroupName -Tier Basic
 
 New-AzureRmWebApp -Name $webappname -Location 'West Europe' -AppServicePlan $webappname -ResourceGroupName $resourceGroupName
 

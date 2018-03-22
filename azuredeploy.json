@@ -333,7 +333,7 @@
         "transformation": {
           "name": "Transformation",
           "properties": {
-            "query": "SELECT\r\n    *\r\nINTO\r\n    [chartdata]\r\nFROM\r\n    [iotdata] \r\n SELECT\r\n    *\r\nINTO\r\n    [dbEuropeData]\r\nFROM\r\n    [iotdata] WHERE location = 'EU'",
+            "query": "SELECT\r\n    *\r\nINTO\r\n  [dbUSdata]\r\nFROM\r\n    [iotdata]  WHERE location = 'GN' \r\n SELECT\r\n    *\r\nINTO\r\n    [dbEuropeData]\r\nFROM\r\n    [iotdata] WHERE location = 'EU' \r\n SELECT\r\n    *\r\nINTO\r\n    [dbGeneralData]\r\nFROM\r\n    [iotdata] WHERE location = 'GN'",
             "streamingUnits": 1
           }
         },
