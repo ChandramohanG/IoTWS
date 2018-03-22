@@ -39,7 +39,7 @@
       ],
       "defaultValue": "S1",
       "metadata": {
-        "description": "Recommended is S2"
+        "description": "Recommended is S3"
       }
     },
     "capacityUnits": {
