@@ -10,36 +10,36 @@ Work In Progress..
   <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
-<br/>
 
-
-Summary:
+##Summary:##
 -------
 Please go through IoTWateringSystem.docx and TechDesign.pptx. Estimates.xlsx has the cost estimates for this proposed infrastructure.
 
 Use Deploy to Azure to deploy the infrastructure. 
 
-Recommendations:
+######Parameters:######
 
-IoTHub: 	S3 Plan with 4 units
+* iotHubName 			- Name of the IoT Hub
+ 
+* IoTManagementAppPlanName	- Web Portal App Service Plan Name
 
-App Sercices: 	S3 Standard
+* IoTManagementAppName		- Web Portal Web Site Name
 
-Storage:	Blob container with tier set to cool
+* IoTManagementAppPlanSkuName: 	- App Service SKU 		Recommended: S3 
 
-Parameters:
+* ioTHub_skuName:			- ioTHub Plan: 		Recommended: S3 
 
-iotHubName 			- Name of the IoT Hub
-IoTManagementAppPlanName	- Web Portal App Service Plan Name
-IoTManagementAppName		- Web Portal Web Site Name
-IoTManagementAppPlanSkuName: 	- App Service SKU 	Recommended: S3
-ioTHub_skuName:			- ioTHub Plan: 		Recommended: S3
-capacityUnits:			- ioTHub Unit		Recommended: 4
-Streamingjobname		- Stream Analytics Job Name
-Storageeuropedata_name		- Storage for Europe region data
-StorageUSdata_name		- Storage for US region data
-Storagegeneraldata_name		- Storage for General data
-UserandReferenceData_name	- Storage for user and reference data
+* capacityUnits:			- ioTHub Unit		Recommended: 4
+
+* Streamingjobname		- Stream Analytics Job Name
+
+* Storageeuropedata_name	- Storage for Europe region data
+
+* StorageUSdata_name		- Storage for US region data
+
+* Storagegeneraldata_name	- Storage for General data
+
+* UserandReferenceData_name	- Storage for user and reference data
 
 
 Manual config changes: 
