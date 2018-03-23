@@ -315,7 +315,7 @@
               "datasource": {
                 "type": "Microsoft.Devices/IotHubs",
                 "properties": {
-                  "iotHubNamespace": "parameters('iotHubName')",
+                  "iotHubNamespace": "IoTMonitoring",
                   "sharedAccessPolicyName": "iothubowner",
                   "sharedAccessPolicyKey": "[listkeys(resourceId('Microsoft.Devices/IotHubs/IotHubKeys',parameters('iotHubName'), 'iothubowner'),'2016-02-03').primaryKey]",
                   "endpoint": "messages/events"
