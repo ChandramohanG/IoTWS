@@ -41,6 +41,8 @@ Use Deploy to Azure to deploy the infrastructure.
 
 * UserandReferenceData_name	- Storage for user and reference data
 
+Note:
+	Storage Parameters should be unique and in lower case.
 
 Manual config changes: 
 	Once deployed, need to create the storage containers manaully and provide shared access key of the storage key to the streaming Analytics storage outputs.

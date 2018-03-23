@@ -315,7 +315,7 @@
               "datasource": {
                 "type": "Microsoft.Devices/IotHubs",
                 "properties": {
-                  "iotHubNamespace": "IoTMonitoring",
+                  "iotHubNamespace": "parameters('iotHubName')",
                   "sharedAccessPolicyName": "iothubowner",
                   "sharedAccessPolicyKey": "[listkeys(resourceId('Microsoft.Devices/IotHubs/IotHubKeys',parameters('iotHubName'), 'iothubowner'),'2016-02-03').primaryKey]",
                   "endpoint": "messages/events"
@@ -347,7 +347,7 @@
                   "storageAccounts": [
                     {
                       "accountKey": "storageaccountkey",
-                      "accountName": "europedatastorage1"
+                      "accountName": "[parameters('Storageeuropedata_name')]"
                     }
                   ],
                   "container": "container4data",
@@ -375,7 +375,7 @@
                   "storageAccounts": [
                     {
                       "accountKey": "storageaccountkey",
-                      "accountName": "usdatastorage1"
+                      "accountName": "[parameters('StorageUSdata_name')]"
                     }
                   ],
                   "container": "container4data",
@@ -403,7 +403,7 @@
                   "storageAccounts": [
                     {
                       "accountKey": "storageaccountkey",
-                      "accountName": "generaldatastorage1"
+                      "accountName": "[parameters('Storagegeneraldata_name')]"
                     }
                   ],
                   "container": "container4data",
