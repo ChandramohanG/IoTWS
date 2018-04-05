@@ -38,7 +38,7 @@
         "S2",
         "S3"
       ],
-      "defaultValue": "S1",
+      "defaultValue": "F1",
       "metadata": {
         "description": "Recommended is S3"
       }
@@ -91,23 +91,19 @@
         "eventHubEndpoints": {
           "events": {
             "retentionTimeInDays": 1,
-            "partitionCount": 4,
+            "partitionCount": 2,
             "partitionIds": [
               "0",
-              "1",
-              "2",
-              "3"
+              "1"
             ],
             "endpoint": "string"
           },
           "operationsMonitoringEvents": {
             "retentionTimeInDays": 1,
-            "partitionCount": 4,
+            "partitionCount": 2,
             "partitionIds": [
               "0",
-              "1",
-              "2",
-              "3"
+              "1"
             ],
             "endpoint": "string"
           }
